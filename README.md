@@ -14,7 +14,7 @@ Electronics & VLSI Design design at DTU, passionate about algorithmic trading sy
 ---
 
 ### 📂 Featured Projects
-* 📈 **[algorithmic-stock-rating-program](https://github.com/harjasjolly-create/algorithmic-stock-rating-program/tree/main):Multi-factor algorithmic trading model combining ML technical classifiers, fundamental valuation scoring, and NLP news sentiment.
+* 📈 **[algorithmic-stock-rating-program](https://github.com/harjasjolly-create/algorithmic-stock-rating-program/tree/main)**:Multi-factor algorithmic trading model combining ML technical classifiers, fundamental valuation scoring, and NLP news sentiment.
 * 👁️ **[cattle-classifier-v1](https://github.com/harjasjolly-create/cattle-classifier-v1/tree/main):** Deep learning/vision pipeline for automated feature extraction and object detection , built for classifying Indian cattle breeds.
 
 ---
