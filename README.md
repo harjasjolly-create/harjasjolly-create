@@ -1,7 +1,7 @@
 # Hi, I'm Harjas Singh 👋
 
 ### 🚀 Quantitative Development & Applied Machine Learning
-Electronics & VLSI Design design at DTU, passionate about algorithmic trading systems, statistical modeling, and computer vision architectures.
+Electronics & VLSI Design student at DTU, passionate about algorithmic trading systems, statistical modeling, and computer vision architectures.
 
 ---
 
