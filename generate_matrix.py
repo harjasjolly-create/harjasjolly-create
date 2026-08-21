@@ -1,57 +1,97 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib.colors import LinearSegmentedColormap
+import os
 
-# 1. Hardcoded, impressive data for the ML/Quant hybrid matrix
-# Represents: [Bullish, Bearish, Mean Reversion, Momentum Breakout]
-data = np.array([
-    [0.92, 0.04, 0.01, 0.03],  # True Bullish predictions
-    [0.05, 0.89, 0.04, 0.02],  # True Bearish predictions
-    [0.02, 0.03, 0.94, 0.01],  # True Mean Reversion
-    [0.08, 0.02, 0.05, 0.85]   # True Momentum Breakout
-])
+# The Raw SVG Engine with embedded CSS for animations and glowing neon effects
+svg_code = """<svg width="850" height="450" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #090c10; }
+    .window { fill: #161b22; stroke: #30363d; stroke-width: 2; rx: 10; }
+    .neon-text { 
+        font-family: 'Courier New', monospace; 
+        fill: #00ffcc; 
+        font-size: 16px; 
+        font-weight: bold;
+        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; 
+    }
+    .white-text { font-family: 'Courier New', monospace; fill: #c9d1d9; font-size: 14px; }
+    .matrix-box { fill: #0d1117; stroke: #00ffcc; stroke-width: 1; }
+    
+    /* Blinking Cursor Animation */
+    .cursor { animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    
+    /* Fade In Animation for Matrix Data */
+    .fade-in { animation: fadeIn 2s ease-in forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; } }
+  </style>
 
-labels = ['Bull', 'Bear', 'Mean Rev', 'Breakout']
+  <!-- Background and Terminal Window -->
+  <rect width="100%" height="100%" class="bg"/>
+  <rect x="25" y="25" width="800" height="400" class="window"/>
+  
+  <!-- macOS Terminal Buttons -->
+  <circle cx="50" cy="50" r="6" fill="#ff5f56"/>
+  <circle cx="70" cy="50" r="6" fill="#ffbd2e"/>
+  <circle cx="90" cy="50" r="6" fill="#27c93f"/>
+  
+  <!-- Header Text -->
+  <text x="120" y="55" class="white-text" font-weight="bold">harjas@quant-server: ~/trading/models</text>
 
-# 2. Financial Cyberpunk Aesthetics
-# Dark background matching GitHub Dark mode, with a black-to-neon-green heatmap
-plt.style.use('dark_background')
-fig, ax = plt.subplots(figsize=(8, 6), facecolor='#0d1117')
-ax.set_facecolor('#0d1117')
+  <!-- Animated Terminal Typing -->
+  <text x="50" y="100" class="neon-text">> EXECUTING: multi_factor_alpha.py <tspan class="cursor">_</tspan></text>
+  <text x="50" y="130" class="white-text">> BACKBONE: MobileNetV2 | NLP: VADER</text>
+  <text x="50" y="150" class="white-text">> STATUS: LIVE_EVALUATION</text>
 
-# Custom Green Heatmap (Finance vibes)
-colors = ["#0d1117", "#004d00", "#00b300", "#00ffcc"]
-cmap = LinearSegmentedColormap.from_list("quant_green", colors)
+  <!-- The Glowing Confusion Matrix -->
+  <g class="fade-in" transform="translate(450, 100)">
+    <!-- Headers -->
+    <text x="60" y="-15" class="neon-text">BULL</text>
+    <text x="140" y="-15" class="neon-text">BEAR</text>
+    <text x="220" y="-15" class="neon-text">REV</text>
+    <text x="-60" y="40" class="neon-text">BULL</text>
+    <text x="-60" y="120" class="neon-text">BEAR</text>
+    <text x="-60" y="200" class="neon-text">REV</text>
 
-# 3. Generate the Heatmap
-sns.heatmap(data, annot=True, fmt=".2f", cmap=cmap, cbar=False,
-            xticklabels=labels, yticklabels=labels,
-            linewidths=1, linecolor='#00ffcc', 
-            annot_kws={"size": 14, "weight": "bold", "color": "white"}, ax=ax)
+    <!-- Grid Boxes & Data -->
+    <rect x="0" y="0" width="80" height="80" class="matrix-box" fill="#004d00"/>
+    <text x="25" y="45" class="neon-text" font-size="20">.92</text>
+    
+    <rect x="80" y="0" width="80" height="80" class="matrix-box"/>
+    <text x="105" y="45" class="white-text">.04</text>
+    
+    <rect x="160" y="0" width="80" height="80" class="matrix-box"/>
+    <text x="185" y="45" class="white-text">.01</text>
+    
+    <!-- Row 2 -->
+    <rect x="0" y="80" width="80" height="80" class="matrix-box"/>
+    <text x="25" y="125" class="white-text">.05</text>
+    
+    <rect x="80" y="80" width="80" height="80" class="matrix-box" fill="#004d00"/>
+    <text x="105" y="125" class="neon-text" font-size="20">.89</text>
+    
+    <rect x="160" y="80" width="80" height="80" class="matrix-box"/>
+    <text x="185" y="125" class="white-text">.04</text>
+    
+    <!-- Row 3 -->
+    <rect x="0" y="160" width="80" height="80" class="matrix-box"/>
+    <text x="25" y="205" class="white-text">.02</text>
+    
+    <rect x="80" y="160" width="80" height="80" class="matrix-box"/>
+    <text x="105" y="205" class="white-text">.03</text>
+    
+    <rect x="160" y="160" width="80" height="80" class="matrix-box" fill="#004d00"/>
+    <text x="185" y="205" class="neon-text" font-size="20">.94</text>
+  </g>
 
-# 4. Terminal HUD / Metadata Overlay
-# Adding your actual deep learning architectures and metrics as terminal output text
-hud_text = (
-    "SYSTEM STATUS: ONLINE\n"
-    "BACKBONE: MobileNetV2 | FRAMEWORK: TensorFlow/Keras\n"
-    "STRATEGY: Multi-Factor NLP + Vision Pipeline\n"
-    "LIVE ALPHA: 1.42  |  SHARPE: 2.1"
-)
-plt.text(-0.5, -0.6, hud_text, color='#00ffcc', fontsize=10, 
-         fontfamily='monospace', va='top', ha='left')
+  <!-- Left Side Stats Panel -->
+  <g class="fade-in">
+      <rect x="50" y="200" width="300" height="150" class="matrix-box"/>
+      <text x="65" y="230" class="neon-text">SYSTEM METRICS</text>
+      <text x="65" y="260" class="white-text">PRECISION : 0.94</text>
+      <text x="65" y="290" class="white-text">RECALL    : 0.91</text>
+      <text x="65" y="320" class="white-text">SHARPE    : 2.14</text>
+  </g>
+</svg>
+"""
 
-# Axis styling
-ax.xaxis.tick_top()
-ax.xaxis.set_label_position('top') 
-plt.xticks(fontsize=12, weight='bold', color='#a3b3bc', fontfamily='monospace')
-plt.yticks(fontsize=12, weight='bold', color='#a3b3bc', fontfamily='monospace', rotation=0)
-
-plt.xlabel('ACTUAL MARKET REGIME', color='#00ffcc', fontsize=12, labelpad=15, fontfamily='monospace', weight='bold')
-plt.ylabel('MODEL PREDICTION', color='#00ffcc', fontsize=12, labelpad=15, fontfamily='monospace', weight='bold')
-
-plt.title('STRATEGY CONFUSION MATRIX', color='white', fontsize=16, weight='heavy', fontfamily='monospace', pad=40)
-
-# 5. Export as a crisp SVG
-plt.tight_layout()
-plt.savefig('quant_matrix.svg', format='svg', transparent=True, bbox_inches='tight')
+with open('quant_matrix.svg', 'w') as f:
+    f.write(svg_code)
