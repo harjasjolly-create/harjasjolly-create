@@ -1,97 +1,139 @@
 import os
 
-# The Raw SVG Engine with embedded CSS for animations and glowing neon effects
-svg_code = """<svg width="850" height="450" xmlns="http://www.w3.org/2000/svg">
+# The ultimate dynamic SVG engine with sequential boot-up animations
+svg_code = """<svg width="900" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Glowing Neon Filter -->
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    
+    <!-- Heatmap Gradients -->
+    <linearGradient id="heat-high" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ffcc" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#004d00" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="heat-low" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1923" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#16202b" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
   <style>
-    .bg { fill: #090c10; }
-    .window { fill: #161b22; stroke: #30363d; stroke-width: 2; rx: 10; }
-    .neon-text { 
-        font-family: 'Courier New', monospace; 
-        fill: #00ffcc; 
-        font-size: 16px; 
-        font-weight: bold;
-        text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; 
-    }
-    .white-text { font-family: 'Courier New', monospace; fill: #c9d1d9; font-size: 14px; }
-    .matrix-box { fill: #0d1117; stroke: #00ffcc; stroke-width: 1; }
+    /* Global Styles */
+    .bg-main { fill: #07090c; }
+    .pane { fill: #0d1117; stroke: #30363d; stroke-width: 1.5; rx: 8; }
+    .text-base { font-family: 'Courier New', monospace; font-size: 13px; }
     
-    /* Blinking Cursor Animation */
-    .cursor { animation: blink 1s step-end infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    /* Terminal Styles */
+    .term-header { fill: #8b949e; font-weight: bold; font-size: 14px; }
+    .term-text { fill: #c9d1d9; }
+    .term-highlight { fill: #00ffcc; font-weight: bold; }
+    .term-accent { fill: #ff7b72; }
     
-    /* Fade In Animation for Matrix Data */
-    .fade-in { animation: fadeIn 2s ease-in forwards; opacity: 0; }
+    /* Matrix Styles */
+    .matrix-title { fill: #ffffff; font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace; letter-spacing: 2px; }
+    .matrix-label { fill: #8b949e; font-size: 12px; font-weight: bold; font-family: 'Courier New', monospace; }
+    .matrix-val { fill: #ffffff; font-size: 22px; font-weight: bold; font-family: 'Courier New', monospace; }
+    .matrix-cell { stroke: #30363d; stroke-width: 1; rx: 4; }
+    
+    /* Animations */
+    .typing-line { opacity: 0; animation: typeIn 0.1s forwards; }
+    .fade-in { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
+    .pulse { animation: pulseOpacity 2s infinite; }
+    
+    /* Staggered Delays for Boot-up Sequence */
+    .delay-1 { animation-delay: 0.5s; }
+    .delay-2 { animation-delay: 1.2s; }
+    .delay-3 { animation-delay: 1.9s; }
+    .delay-4 { animation-delay: 2.6s; }
+    .delay-5 { animation-delay: 3.3s; }
+    .delay-matrix { animation-delay: 4.0s; }
+
+    @keyframes typeIn { to { opacity: 1; } }
     @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes pulseOpacity { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   </style>
 
-  <!-- Background and Terminal Window -->
-  <rect width="100%" height="100%" class="bg"/>
-  <rect x="25" y="25" width="800" height="400" class="window"/>
+  <!-- Background -->
+  <rect width="100%" height="100%" class="bg-main"/>
+
+  <!-- ================= LEFT PANE: TERMINAL ================= -->
+  <rect x="20" y="20" width="410" height="360" class="pane"/>
   
-  <!-- macOS Terminal Buttons -->
-  <circle cx="50" cy="50" r="6" fill="#ff5f56"/>
-  <circle cx="70" cy="50" r="6" fill="#ffbd2e"/>
-  <circle cx="90" cy="50" r="6" fill="#27c93f"/>
-  
-  <!-- Header Text -->
-  <text x="120" y="55" class="white-text" font-weight="bold">harjas@quant-server: ~/trading/models</text>
+  <!-- macOS Buttons -->
+  <circle cx="45" cy="40" r="6" fill="#ff5f56"/>
+  <circle cx="65" cy="40" r="6" fill="#ffbd2e"/>
+  <circle cx="85" cy="40" r="6" fill="#27c93f"/>
+  <text x="110" y="45" class="text-base term-header">harjas@quant-core:~</text>
 
-  <!-- Animated Terminal Typing -->
-  <text x="50" y="100" class="neon-text">> EXECUTING: multi_factor_alpha.py <tspan class="cursor">_</tspan></text>
-  <text x="50" y="130" class="white-text">> BACKBONE: MobileNetV2 | NLP: VADER</text>
-  <text x="50" y="150" class="white-text">> STATUS: LIVE_EVALUATION</text>
-
-  <!-- The Glowing Confusion Matrix -->
-  <g class="fade-in" transform="translate(450, 100)">
-    <!-- Headers -->
-    <text x="60" y="-15" class="neon-text">BULL</text>
-    <text x="140" y="-15" class="neon-text">BEAR</text>
-    <text x="220" y="-15" class="neon-text">REV</text>
-    <text x="-60" y="40" class="neon-text">BULL</text>
-    <text x="-60" y="120" class="neon-text">BEAR</text>
-    <text x="-60" y="200" class="neon-text">REV</text>
-
-    <!-- Grid Boxes & Data -->
-    <rect x="0" y="0" width="80" height="80" class="matrix-box" fill="#004d00"/>
-    <text x="25" y="45" class="neon-text" font-size="20">.92</text>
-    
-    <rect x="80" y="0" width="80" height="80" class="matrix-box"/>
-    <text x="105" y="45" class="white-text">.04</text>
-    
-    <rect x="160" y="0" width="80" height="80" class="matrix-box"/>
-    <text x="185" y="45" class="white-text">.01</text>
-    
-    <!-- Row 2 -->
-    <rect x="0" y="80" width="80" height="80" class="matrix-box"/>
-    <text x="25" y="125" class="white-text">.05</text>
-    
-    <rect x="80" y="80" width="80" height="80" class="matrix-box" fill="#004d00"/>
-    <text x="105" y="125" class="neon-text" font-size="20">.89</text>
-    
-    <rect x="160" y="80" width="80" height="80" class="matrix-box"/>
-    <text x="185" y="125" class="white-text">.04</text>
-    
-    <!-- Row 3 -->
-    <rect x="0" y="160" width="80" height="80" class="matrix-box"/>
-    <text x="25" y="205" class="white-text">.02</text>
-    
-    <rect x="80" y="160" width="80" height="80" class="matrix-box"/>
-    <text x="105" y="205" class="white-text">.03</text>
-    
-    <rect x="160" y="160" width="80" height="80" class="matrix-box" fill="#004d00"/>
-    <text x="185" y="205" class="neon-text" font-size="20">.94</text>
+  <!-- Terminal Boot Sequence -->
+  <g class="text-base">
+    <text x="40" y="90" class="typing-line delay-1 term-text">> initializing neural architecture...</text>
+    <text x="40" y="120" class="typing-line delay-2 term-text">> loading backbone: <tspan class="term-highlight">MobileNetV2</tspan></text>
+    <text x="40" y="150" class="typing-line delay-3 term-text">> setting framework: <tspan class="term-highlight">TensorFlow Keras</tspan></text>
+    <text x="40" y="180" class="typing-line delay-4 term-text">> injecting NLP: <tspan class="term-accent">VADER Sentiment</tspan></text>
+    <text x="40" y="210" class="typing-line delay-4 term-text">> connecting live data pipelines...</text>
+    <text x="40" y="260" class="typing-line delay-5 term-text">> status: <tspan class="term-highlight pulse" filter="url(#neon-glow)">optimizing the climb...</tspan></text>
+    <text x="40" y="290" class="typing-line delay-5 term-text">> executing: alpha_matrix.sh</text>
   </g>
 
-  <!-- Left Side Stats Panel -->
-  <g class="fade-in">
-      <rect x="50" y="200" width="300" height="150" class="matrix-box"/>
-      <text x="65" y="230" class="neon-text">SYSTEM METRICS</text>
-      <text x="65" y="260" class="white-text">PRECISION : 0.94</text>
-      <text x="65" y="290" class="white-text">RECALL    : 0.91</text>
-      <text x="65" y="320" class="white-text">SHARPE    : 2.14</text>
+  <!-- ================= RIGHT PANE: CONFUSION MATRIX ================= -->
+  <rect x="450" y="20" width="430" height="360" class="pane"/>
+  
+  <g class="fade-in delay-matrix">
+    <text x="480" y="55" class="matrix-title">STRATEGY CONFUSION MATRIX</text>
+    <line x1="480" y1="70" x2="850" y2="70" stroke="#30363d" stroke-width="2"/>
+
+    <!-- Matrix Grid Container -->
+    <g transform="translate(530, 110)">
+      <!-- Column Labels -->
+      <text x="35" y="-15" class="matrix-label">BULLISH</text>
+      <text x="140" y="-15" class="matrix-label">BEARISH</text>
+      <text x="245" y="-15" class="matrix-label">MEAN_REV</text>
+
+      <!-- Row Labels -->
+      <text x="-60" y="45" class="matrix-label">BULLISH</text>
+      <text x="-60" y="135" class="matrix-label">BEARISH</text>
+      <text x="-60" y="225" class="matrix-label">MEAN_REV</text>
+
+      <!-- Row 1 -->
+      <rect x="0" y="0" width="90" height="80" class="matrix-cell" fill="url(#heat-high)"/>
+      <text x="25" y="50" class="matrix-val">.92</text>
+      
+      <rect x="100" y="0" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="50" transform="translate(100,0)" class="matrix-val" fill="#8b949e">.04</text>
+      
+      <rect x="200" y="0" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="50" transform="translate(200,0)" class="matrix-val" fill="#8b949e">.01</text>
+
+      <!-- Row 2 -->
+      <rect x="0" y="90" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="140" class="matrix-val" fill="#8b949e">.05</text>
+      
+      <rect x="100" y="90" width="90" height="80" class="matrix-cell" fill="url(#heat-high)"/>
+      <text x="25" y="140" transform="translate(100,0)" class="matrix-val">.89</text>
+      
+      <rect x="200" y="90" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="140" transform="translate(200,0)" class="matrix-val" fill="#8b949e">.04</text>
+
+      <!-- Row 3 -->
+      <rect x="0" y="180" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="230" class="matrix-val" fill="#8b949e">.02</text>
+      
+      <rect x="100" y="180" width="90" height="80" class="matrix-cell" fill="url(#heat-low)"/>
+      <text x="25" y="230" transform="translate(100,0)" class="matrix-val" fill="#8b949e">.03</text>
+      
+      <rect x="200" y="180" width="90" height="80" class="matrix-cell" fill="url(#heat-high)"/>
+      <text x="25" y="230" transform="translate(200,0)" class="matrix-val">.94</text>
+    </g>
   </g>
 </svg>
 """
 
-with open('quant_matrix.svg', 'w') as f:
+with open('quant_dashboard.svg', 'w') as f:
     f.write(svg_code)
