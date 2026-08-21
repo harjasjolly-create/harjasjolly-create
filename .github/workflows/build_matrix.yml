@@ -1,4 +1,4 @@
-name: Generate Quant Matrix
+name: Generate Dynamic Quant Dashboard
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # This gives the bot permission to push the SVG
+  contents: write
 
 jobs:
   build:
@@ -20,11 +20,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
-        run: |
-          pip install numpy matplotlib seaborn
-
-      - name: Generate Matrix SVG
+      - name: Generate Dashboard SVG
         run: |
           python generate_matrix.py
 
@@ -32,6 +28,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add quant_matrix.svg
-          git commit -m "Update Quant Strategy Matrix" || exit 0
+          git add quant_dashboard.svg
+          git commit -m "Update Dynamic Quant Dashboard" || exit 0
           git push
