@@ -2,8 +2,11 @@ name: Generate Quant Matrix
 
 on:
   schedule:
-    - cron: "0 */12 * * *" # Runs every 12 hours
-  workflow_dispatch: # Allows you to run it manually
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write # This gives the bot permission to push the SVG
 
 jobs:
   build:
