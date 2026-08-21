@@ -1,17 +1,17 @@
 # Hi, I'm Harjas Singh 👋
 
+<div align="center">
+  <img src="quant_dashboard.svg" alt="Dynamic Quant Dashboard" width="100%">
+</div>
+
 ### 🚀 Quantitative Development & Applied Machine Learning
 Electronics & VLSI Design student at DTU, passionate about algorithmic trading systems, statistical modeling, and computer vision architectures.
-
-<div align="center">
-  <img src="quant_matrix.svg" alt="Live Strategy Matrix" width="600">
-</div>
 
 ---
 
 ### 🛠️ Technical Toolkit
 * **Languages:** Python, C++, SQL, LaTeX
-* **Machine Learning & Quant:** TensorFlow, Keras, Scikit-Learn, Pandas, NumPy, Statsmodels, VADER NLP
+* **Machine Learning & Quant:** TensorFlow Keras, Scikit-Learn, Pandas, NumPy, Statsmodels, VADER NLP
 * **Data Pipelines & Visualization:** Plotly, BeautifulSoup, Matplotlib, Seaborn, yfinance
 * **Developer Tools:** VSCode, Linux / Bash, Jupyter, Google Colab
 
