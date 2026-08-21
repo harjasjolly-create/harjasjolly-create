@@ -1,0 +1,34 @@
+name: Generate Quant Matrix
+
+on:
+  schedule:
+    - cron: "0 */12 * * *" # Runs every 12 hours
+  workflow_dispatch: # Allows you to run it manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install numpy matplotlib seaborn
+
+      - name: Generate Matrix SVG
+        run: |
+          python generate_matrix.py
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add quant_matrix.svg
+          git commit -m "Update Quant Strategy Matrix" || exit 0
+          git push
